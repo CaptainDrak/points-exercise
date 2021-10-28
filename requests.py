@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import request_logic as rl
+import request_json_validation as rj
 
 app = Flask(__name__)
 
@@ -8,6 +9,10 @@ transactions = []
 @app.route('/add', methods=['POST'])
 def add():
     json = request.get_json()
+    json_validation = rj.add_json_validation(json)
+
+    if json_validation != None:
+        return json_validation, 400
 
     negative_check = rl.check_for_negative_balance(transactions, json)
     if negative_check[0] == False:
@@ -19,9 +24,15 @@ def add():
 @app.route('/spend', methods=['POST'])
 def spend():
     json = request.get_json(cache=True)
+    json_validation = rj.spend_json_validation(json)
+
+    if json_validation != None:
+        return json_validation, 400
+    
     points = json['points']
     sorted_transactions = sorted(transactions, key=lambda d: d['timestamp'])
     total_balance = rl.calculate_total_balance(sorted_transactions)
+    json_validation = rj.spend_json_validation(json)
 
     if total_balance < points:
         return f'Requested {points} points be spent, but there are only {total_balance} points available. Cannot request to spend more points than are available.', 400
