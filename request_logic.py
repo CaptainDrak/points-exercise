@@ -2,13 +2,13 @@
 #accepts a list of transactions
 #returns a list of balances for each payer
 def calculate_balances(transactions):
-    balance = {}
+    point_balances = {}
     for i in transactions:
-        if i['payer'] in balance.keys():
-            balance[i['payer']] = balance[i['payer']] + i['points']
+        if i['payer'] in point_balances.keys():
+            point_balances[i['payer']] = point_balances[i['payer']] + i['points']
         else:
-            balance[i['payer']] = i['points']
-    return balance
+            point_balances[i['payer']] = i['points']
+    return point_balances
 
 #calculates total point balance across all payers
 #accepts a list of transactions
@@ -24,15 +24,15 @@ def calculate_total_balance(transactions):
 #accepts a list of transactions and a transaction request
 #returns True/False and point total integer for that payer
 def check_for_negative_balance(transactions, request):
-    balance = calculate_balances(transactions)
-    if request['payer'] not in balance.keys() and request['points'] >= 0:
+    point_balances = calculate_balances(transactions)
+    if request['payer'] not in point_balances.keys() and request['points'] >= 0:
         return False, 0
-    elif request['payer'] not in balance.keys() and request['points'] < 0:
+    elif request['payer'] not in point_balances.keys() and request['points'] < 0:
         return True, 0
-    elif request['payer'] in balance.keys():
-        if (balance[request['payer']] + request['points']) < 0:
-            return True, balance[request['payer']]
-        else: return False, balance[request['payer']]
+    elif request['payer'] in point_balances.keys():
+        if (point_balances[request['payer']] + request['points']) < 0:
+            return True, point_balances[request['payer']]
+        else: return False, point_balances[request['payer']]
 
 #spends a requested total of points
 #accepts a list of transactions and a points integer
