@@ -3,7 +3,6 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 transactions = []
-balance = {}
 
 @app.route('/add', methods=['POST'])
 def add_transaction():
@@ -17,6 +16,7 @@ def add_transaction():
 
 @app.route('/balance')
 def get_balance():
+    balance = {}
     for i in transactions:
         if i['payer'] in balance.keys():
             balance[i['payer']] = balance[i['payer']] + i['points']
