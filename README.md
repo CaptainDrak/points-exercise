@@ -31,7 +31,7 @@ http://localhost:5000
 ```
 Adds a transaction for a specific payer. Responds with a copy of the transaction that was added.  
 
-Structure:  
+The body of the request should be sent as a raw json object with the structure:  
 ```
 {
   "payer": <string>
@@ -58,8 +58,8 @@ Example:
   POST /spend
 ```
 Spends a requested amount of points. Points from the oldest (by timestamp) transactions will be spent first. Responds with a list of all total points spent by each payer.  
-
-Structure:
+  
+The body of the request should be sent as a raw json object with the structure:  
 ```
 {
   points: <integer>
