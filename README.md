@@ -26,7 +26,7 @@ http://localhost:5000
 
 #### **Add transaction**
 
-```http
+```
   POST /add
 ```
 Adds a transaction for a specific payer. Responds with a copy of the transaction that was added.  
