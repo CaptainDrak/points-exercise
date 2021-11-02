@@ -42,8 +42,8 @@ The body of the request should be sent as a raw json object with the structure:
 Example:  
 ```
 {
-  "payer": "Let's Potato Chips"
-  "points": 5000
+  "payer": "Let's Potato Chips",
+  "points": 5000,
   "timestamp": "2020-09-04T12:30:00Z"
 }
 ```
@@ -68,7 +68,7 @@ The body of the request should be sent as a raw json object with the structure:
 Example:
 ```
 {
-  points: 2000
+  "points": 2000
 }
 ```
 </details>
