@@ -3,9 +3,9 @@ from flask import jsonify
 
 transactions = []
 
-#calculates existing balances for all payers
+#calculates existing balances for all payers and trims zero-sum balances
 #accepts a list of transactions
-#returns a dict of balances for each payer
+#returns a dict of balances by payer
 def calculate_balances():
     point_balances = {}
     for i in transactions:
@@ -13,17 +13,33 @@ def calculate_balances():
             point_balances[i['payer']] = point_balances[i['payer']] + i['points']
         else:
             point_balances[i['payer']] = i['points']
-
-    zero_sum_payers = []
-
-    for i in point_balances:
-        if point_balances[i] == 0:
-            zero_sum_payers.append(i)
-    
-    for i in zero_sum_payers:
-        point_balances.pop(i)
-
+    print('About to enter trim function.')
+    trim_zero_sum_transactions(point_balances)
     return point_balances
+
+#trims zero-sum transactions by payer based on total payer balances
+#accepts a dict of balances by payer (identical to returned value of calculate_balances())
+def trim_zero_sum_transactions(balances):
+    zero_sum_payers = []
+    transactions_to_delete = []
+    counter = 0
+
+    for i in balances:
+        if balances[i] == 0:
+            zero_sum_payers.append(i)
+
+    for i in zero_sum_payers:
+        for t in transactions:
+            if i in t['payer']:
+                transactions_to_delete.append(counter)
+            counter += 1
+        balances.pop(i)
+
+    transactions_to_delete = sorted(transactions_to_delete, reverse=True)
+
+    for i in transactions_to_delete:
+        del transactions[i]
+
 
 #calculates total point balance across all payers
 #accepts a list of transactions
@@ -35,7 +51,7 @@ def calculate_total_balance(passed_transactions):
     return total_balance
 
 #calculates total balance spent, based on differences in passed balances
-#accepts two dicts of balances (identical to returned value of calculate_balances())
+#accepts two dicts of balances by payer (identical to returned value of calculate_balances())
 #returns a jsonified dict of spent balances by payer
 def calculate_spent_balances(original_balance, new_balance):
     spent_points = {}

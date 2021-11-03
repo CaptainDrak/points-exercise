@@ -8,13 +8,19 @@ points-exercise is a web service that creates a log of point accumulation transa
 
 If you don't have it already, you'll need to install Docker. You can find the instructions to do so here: https://docs.docker.com/get-docker/
 
-After docker has been installed, pull this repo and navigate to it on your machine using terminal, command prompt, etc. Once there, run these commands:
+If you are on a linux system, you will need to additionally install docker-compose seperately, along with installing docker itself. You can do so here: https://docs.docker.com/compose/install/#install-compose-on-linux-systems
+
+After docker has been installed, pull this repo and navigate to it on your machine using terminal, command prompt, etc. Once there, run this command:
 
 ```bash
-  docker build -t points .
-  docker run -p 5000:5000 points
+    docker compose up
 ```
 This will run a docker container containing the points-exercise service. You can then make requests to the endpoints indicated below.
+
+To spin down the container, run this command:
+```bash
+    docker compose down
+```
 ## Endpoints
 
 The base URL for all requests when being made to the docker container is:
