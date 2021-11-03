@@ -1,5 +1,13 @@
 from jsonschema import validate, SchemaError, ValidationError
 
+def error_handling(request, schema):
+    try:
+        validate(instance=request, schema=schema)
+    except ValidationError as error:
+        return error.message
+    except SchemaError as error:
+        return error.message
+
 def add_json_validation(request):
     schema = {
         "type" : "object",
@@ -12,10 +20,7 @@ def add_json_validation(request):
         "additionalProperties": False
     }
 
-    try:
-        validate(instance=request, schema=schema)
-    except ValidationError as error:
-        return error.message
+    return error_handling(request, schema)
 
 
 def spend_json_validation(request):
@@ -28,7 +33,4 @@ def spend_json_validation(request):
         "additionalProperties": False
     }
 
-    try:
-        validate(instance=request, schema=schema)
-    except ValidationError as error:
-        return error.message
+    return error_handling(request, schema)
